@@ -374,4 +374,52 @@ pre code {
         justify-content: flex-end;
         margin-left: 0;
     }
+}
+
+/* Operatör Detayları Stilleri */
+.operator-details {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: var(--bg-primary);
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-color);
+}
+
+.operator-details p {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.operator-details ul {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 1rem;
+}
+
+.operator-details ul li {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+    position: relative;
+    padding-left: 1.2rem;
+}
+
+.operator-details ul li:before {
+    content: "•";
+    color: var(--accent-color);
+    position: absolute;
+    left: 0;
+}
+
+/* Responsive Tasarım */
+@media (max-width: 768px) {
+    .operator-details {
+        padding: 0.8rem;
+    }
+
+    .operator-details p,
+    .operator-details ul li {
+        font-size: 0.85rem;
+    }
 } 

@@ -50,29 +50,170 @@
                     <div class="card">
                         <h3 data-tr="Operatörler ve Açıklamaları" data-en="Operators and Descriptions">Operatörler ve Açıklamaları</h3>
                         <ul>
-                            <li><code>$eq</code> <span data-tr="(Eşittir): Belirtilen değere tam olarak eşit olan değerleri bulur." data-en="(Equal): Finds values that are exactly equal to the specified value.">(Eşittir): Belirtilen değere tam olarak eşit olan değerleri bulur.</span></li>
-                            <li><code>$gt</code> <span data-tr="(Büyüktür): Belirtilen değerden büyük olan değerleri bulur." data-en="(Greater Than): Finds values that are greater than the specified value.">(Büyüktür): Belirtilen değerden büyük olan değerleri bulur.</span></li>
-                            <li><code>$gte</code> <span data-tr="(Büyük Eşittir): Belirtilen değerden büyük veya eşit olan değerleri bulur." data-en="(Greater Than or Equal): Finds values that are greater than or equal to the specified value.">(Büyük Eşittir): Belirtilen değerden büyük veya eşit olan değerleri bulur.</span></li>
-                            <li><code>$in</code> <span data-tr="(İçinde): Belirtilen değerler listesinden herhangi biriyle eşleşen değerleri bulur." data-en="(In): Finds values that match any value in the specified list.">(İçinde): Belirtilen değerler listesinden herhangi biriyle eşleşen değerleri bulur.</span></li>
-                            <li><code>$lt</code> <span data-tr="(Küçüktür): Belirtilen değerden küçük olan değerleri bulur." data-en="(Less Than): Finds values that are less than the specified value.">(Küçüktür): Belirtilen değerden küçük olan değerleri bulur.</span></li>
-                            <li><code>$lte</code> <span data-tr="(Küçük Eşittir): Belirtilen değerden küçük veya eşit olan değerleri bulur." data-en="(Less Than or Equal): Finds values that are less than or equal to the specified value.">(Küçük Eşittir): Belirtilen değerden küçük veya eşit olan değerleri bulur.</span></li>
-                            <li><code>$ne</code> <span data-tr="(Eşit Değildir): Belirtilen değere eşit olmayan tüm değerleri bulur." data-en="(Not Equal): Finds all values that are not equal to the specified value.">(Eşit Değildir): Belirtilen değere eşit olmayan tüm değerleri bulur.</span></li>
-                            <li><code>$nin</code> <span data-tr="(İçinde Değildir): Belirtilen değerler listesinde olmayan değerleri bulur." data-en="(Not In): Finds values that are not in the specified list.">(İçinde Değildir): Belirtilen değerler listesinde olmayan değerleri bulur.</span></li>
-                        </ul>
-                    </div>
-                    <div class="card">
-                        <h3 data-tr="Örnek Kullanımlar" data-en="Example Usage">Örnek Kullanımlar</h3>
-                        <pre><code class="language-go">// $eq example: Find users with age 25
+                            <li>
+                                <code>$eq</code> <span data-tr="(Eşittir): Belirtilen değere tam olarak eşit olan değerleri bulur." data-en="(Equal): Finds values that are exactly equal to the specified value.">(Eşittir): Belirtilen değere tam olarak eşit olan değerleri bulur.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Tam eşleşme gerektiren aramalar" data-en="Exact match searches">Tam eşleşme gerektiren aramalar</li>
+                                        <li data-tr="Dizi içindeki belirli değerleri kontrol etme" data-en="Checking specific values in arrays">Dizi içindeki belirli değerleri kontrol etme</li>
+                                        <li data-tr="Çoklu alan eşitliği kontrolü" data-en="Multiple field equality checks">Çoklu alan eşitliği kontrolü</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Simple equality check
 filter := bson.D{{"age", bson.D{{"$eq", 25}}}}
 
-// $gt and $lt example: Find products with price between 100 and 200
-filter := bson.D{{"price", bson.D{{"$gt", 100}, {"$lt", 200}}}}
+// Check for specific values in an array
+filter := bson.D{{"tags", bson.D{{"$eq", "mongodb"}}}}
 
-// $in example: Find products in specific categories
+// Multiple field equality check
+filter := bson.D{
+    {"$and", bson.A{
+        bson.D{{"name", bson.D{{"$eq", "John"}}}},
+        bson.D{{"age", bson.D{{"$eq", 30}}}},
+    }},
+}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$gt</code> <span data-tr="(Büyüktür): Belirtilen değerden büyük olan değerleri bulur." data-en="(Greater Than): Finds values that are greater than the specified value.">(Büyüktür): Belirtilen değerden büyük olan değerleri bulur.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Maksimum değer kontrolleri" data-en="Maximum value checks">Maksimum değer kontrolleri</li>
+                                        <li data-tr="Fiyat üst limiti kontrolü" data-en="Price upper limit check">Fiyat üst limiti kontrolü</li>
+                                        <li data-tr="Tarih bazlı filtreleme" data-en="Date-based filtering">Tarih bazlı filtreleme</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Maximum value check
+filter := bson.D{{"price", bson.D{{"$lt", 1000}}}}
+
+// Date-based filtering
+filter := bson.D{{"createdAt", bson.D{{"$lt", time.Now()}}}}
+
+// Complex price check
+filter := bson.D{
+    {"$and", bson.A{
+        bson.D{{"price", bson.D{{"$gt", 100}}}},
+        bson.D{{"price", bson.D{{"$lt", 200}}}},
+    }},
+}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$in</code> <span data-tr="(İçinde): Belirtilen değerler listesinden herhangi biriyle eşleşen değerleri bulur." data-en="(In): Finds values that match any value in the specified list.">(İçinde): Belirtilen değerler listesinden herhangi biriyle eşleşen değerleri bulur.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Çoklu kategori filtreleme" data-en="Multiple category filtering">Çoklu kategori filtreleme</li>
+                                        <li data-tr="Durum kontrolü" data-en="Status check">Durum kontrolü</li>
+                                        <li data-tr="ID listesi ile filtreleme" data-en="Filtering with ID list">ID listesi ile filtreleme</li>
+                                    </ul>
+                                        <li>Çoklu kategori filtreleme</li>
+                                        <li>Durum kontrolü</li>
+                                        <li>ID listesi ile filtreleme</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Category filtering
 filter := bson.D{{"category", bson.D{{"$in", []string{"electronics", "clothing", "books"}}}}}
 
-// $nin example: Find users not in specific statuses
-filter := bson.D{{"status", bson.D{{"$nin", []string{"deleted", "inactive"}}}}}</code></pre>
+// Status check
+filter := bson.D{{"status", bson.D{{"$in", []string{"active", "pending"}}}}}
+
+// Filtering with ID list
+filter := bson.D{{"_id", bson.D{{"$in", []primitive.ObjectID{id1, id2, id3}}}}}</code></pre>
+                                </div>
+                            </li>
+                            <li><code>$lt</code> <span data-tr="(Küçüktür): Belirtilen değerden küçük olan değerleri bulur." data-en="(Less Than): Finds values that are less than the specified value.">(Küçüktür): Belirtilen değerden küçük olan değerleri bulur.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Maksimum değer kontrolleri" data-en="Maximum value checks">Maksimum değer kontrolleri</li>
+                                        <li data-tr="Fiyat aralığı filtreleme" data-en="Price range filtering">Fiyat aralığı filtreleme</li>
+                                        <li data-tr="Tarih bazlı filtreleme" data-en="Date-based filtering">Tarih bazlı filtreleme</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Maximum value check
+filter := bson.D{{"price", bson.D{{"$lt", 100}}}}
+
+// Date-based filtering
+filter := bson.D{{"createdAt", bson.D{{"$lt", time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)}}}}
+
+// Complex price check
+filter := bson.D{
+    {"$and", bson.A{
+        bson.D{{"price", bson.D{{"$gt", 100}}}},
+        bson.D{{"price", bson.D{{"$lt", 200}}}},
+    }},
+}</code></pre>
+                                </div>
+                            </li>
+                            <li><code>$lte</code> <span data-tr="(Küçük Eşittir): Belirtilen değerden küçük veya eşit olan değerleri bulur." data-en="(Less Than or Equal): Finds values that are less than or equal to the specified value.">(Küçük Eşittir): Belirtilen değerden küçük veya eşit olan değerleri bulur.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Maksimum değer dahil kontrolleri" data-en="Maximum value inclusive checks">Maksimum değer dahil kontrolleri</li>
+                                        <li data-tr="Fiyat aralığı filtreleme" data-en="Price range filtering">Fiyat aralığı filtreleme</li>
+                                        <li data-tr="Tarih bazlı filtreleme" data-en="Date-based filtering">Tarih bazlı filtreleme</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Maximum value inclusive check
+filter := bson.D{{"price", bson.D{{"$lte", 100}}}}
+
+// Date-based filtering
+filter := bson.D{{"createdAt", bson.D{{"$lte", time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)}}}}
+
+// Complex price check
+filter := bson.D{
+    {"$and", bson.A{
+        bson.D{{"price", bson.D{{"$gte", 100}}}},
+        bson.D{{"price", bson.D{{"$lte", 200}}}},
+    }},
+}</code></pre>
+                                </div>
+                            </li>
+                            <li><code>$ne</code> <span data-tr="(Eşit Değildir): Belirtilen değere eşit olmayan tüm değerleri bulur." data-en="(Not Equal): Finds all values that are not equal to the specified value.">(Eşit Değildir): Belirtilen değere eşit olmayan tüm değerleri bulur.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Değer hariç tutma" data-en="Value exclusion">Değer hariç tutma</li>
+                                        <li data-tr="Durum filtreleme" data-en="Status filtering">Durum filtreleme</li>
+                                        <li data-tr="Kategori hariç tutma" data-en="Category exclusion">Kategori hariç tutma</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Value exclusion
+filter := bson.D{{"status", bson.D{{"$ne", "deleted"}}}}
+
+// Status filtering
+filter := bson.D{{"role", bson.D{{"$ne", "admin"}}}}
+
+// Complex exclusion
+filter := bson.D{
+    {"$and", bson.A{
+        bson.D{{"status", bson.D{{"$ne", "deleted"}}}},
+        bson.D{{"role", bson.D{{"$ne", "guest"}}}},
+    }},
+}</code></pre>
+                                </div>
+                            </li>
+                            <li><code>$nin</code> <span data-tr="(İçinde Değildir): Belirtilen değerler listesinde olmayan değerleri bulur." data-en="(Not In): Finds values that are not in the specified list.">(İçinde Değildir): Belirtilen değerler listesinde olmayan değerleri bulur.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Çoklu değer hariç tutma" data-en="Multiple value exclusion">Çoklu değer hariç tutma</li>
+                                        <li data-tr="Durum filtreleme" data-en="Status filtering">Durum filtreleme</li>
+                                        <li data-tr="Kategori hariç tutma" data-en="Category exclusion">Kategori hariç tutma</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Multiple value exclusion
+filter := bson.D{{"status", bson.D{{"$nin", []string{"deleted", "inactive"}}}}}
+
+// Status filtering
+filter := bson.D{{"role", bson.D{{"$nin", []string{"admin", "moderator"}}}}}
+
+// Complex exclusion
+filter := bson.D{
+    {"$and", bson.A{
+        bson.D{{"status", bson.D{{"$nin", []string{"deleted", "inactive"}}}}},
+        bson.D{{"role", bson.D{{"$nin", []string{"guest", "banned"}}}}},
+    }},
+}</code></pre>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </section>
 
@@ -81,25 +222,122 @@ filter := bson.D{{"status", bson.D{{"$nin", []string{"deleted", "inactive"}}}}}<
                     <div class="card">
                         <h3 data-tr="Operatörler ve Açıklamaları" data-en="Operators and Descriptions">Operatörler ve Açıklamaları</h3>
                         <ul>
-                            <li><code>$and</code> <span data-tr=": Tüm koşulların aynı anda sağlanması gereken sorgular için kullanılır." data-en=": Used for queries where all conditions must be met simultaneously.">: Tüm koşulların aynı anda sağlanması gereken sorgular için kullanılır.</span></li>
-                            <li><code>$or</code> <span data-tr=": Koşullardan herhangi birinin sağlanması yeterli olan sorgular için kullanılır." data-en=": Used for queries where any of the conditions can be met.">: Koşullardan herhangi birinin sağlanması yeterli olan sorgular için kullanılır.</span></li>
-                            <li><code>$not</code> <span data-tr=": Sorgu sonucunu tersine çeviren operatördür." data-en=": Operator that inverts the query result.">: Sorgu sonucunu tersine çeviren operatördür.</span></li>
-                            <li><code>$nor</code> <span data-tr=": Hiçbir koşulun sağlanmaması gereken sorgular için kullanılır." data-en=": Used for queries where none of the conditions should be met.">: Hiçbir koşulun sağlanmaması gereken sorgular için kullanılır.</span></li>
-                        </ul>
-                    </div>
-                    <div class="card">
-                        <h3 data-tr="Örnek Kullanımlar" data-en="Example Usage">Örnek Kullanımlar</h3>
-                        <pre><code class="language-go">// $and example: Find users who are both over 18 and active
+                            <li>
+                                <code>$and</code> <span data-tr=": Tüm koşulların aynı anda sağlanması gereken sorgular için kullanılır." data-en=": Used for queries where all conditions must be met simultaneously.">: Tüm koşulların aynı anda sağlanması gereken sorgular için kullanılır.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Karmaşık filtreleme koşulları" data-en="Complex filtering conditions">Karmaşık filtreleme koşulları</li>
+                                        <li data-tr="Çoklu alan doğrulaması" data-en="Multiple field validation">Çoklu alan doğrulaması</li>
+                                        <li data-tr="İç içe koşullar" data-en="Nested conditions">İç içe koşullar</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Basic AND usage
 filter := bson.D{{"$and", bson.A{
     bson.D{{"age", bson.D{{"$gt", 18}}}},
     bson.D{{"status", "active"}},
 }}}
 
-// $or example: Find users who are either under 18 or not active
+// Multiple condition check
+filter := bson.D{{"$and", bson.A{
+    bson.D{{"price", bson.D{{"$gt", 100}}}},
+    bson.D{{"stock", bson.D{{"$gt", 0}}}},
+    bson.D{{"category", "electronics"}},
+}}}
+
+// Nested AND usage
+filter := bson.D{{"$and", bson.A{
+    bson.D{{"$and", bson.A{
+        bson.D{{"age", bson.D{{"$gt", 18}}}},
+        bson.D{{"age", bson.D{{"$lt", 65}}}},
+    }}},
+    bson.D{{"status", "active"}},
+}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$or</code> <span data-tr=": Koşullardan herhangi birinin sağlanması yeterli olan sorgular için kullanılır." data-en=": Used for queries where any of the conditions can be met.">: Koşullardan herhangi birinin sağlanması yeterli olan sorgular için kullanılır.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Alternatif koşullar" data-en="Alternative conditions">Alternatif koşullar</li>
+                                        <li data-tr="Çoklu durum kontrolü" data-en="Multiple state check">Çoklu durum kontrolü</li>
+                                        <li data-tr="Esnek arama kriterleri" data-en="Flexible search criteria">Esnek arama kriterleri</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Basic OR usage
+filter := bson.D{{"$or", bson.A{
+    bson.D{{"status", "active"}},
+    bson.D{{"status", "pending"}},
+}}}
+
+// Complex OR conditions
 filter := bson.D{{"$or", bson.A{
     bson.D{{"age", bson.D{{"$lt", 18}}}},
-    bson.D{{"status", bson.D{{"$ne", "active"}}}},
+    bson.D{{"age", bson.D{{"$gt", 65}}}},
+    bson.D{{"status", "retired"}},
+}}}
+
+// AND and OR combination
+filter := bson.D{{"$and", bson.A{
+    bson.D{{"category", "electronics"}},
+    bson.D{{"$or", bson.A{
+        bson.D{{"price", bson.D{{"$lt", 100}}}},
+        bson.D{{"discount", bson.D{{"$gt", 20}}}},
+    }}},
 }}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$not</code> <span data-tr=": Sorgu sonucunu tersine çeviren operatördür." data-en=": Operator that inverts the query result.">: Sorgu sonucunu tersine çeviren operatördür.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Koşulların tersini alma" data-en="Inverting conditions">Koşulların tersini alma</li>
+                                        <li data-tr="Hariç tutma işlemleri" data-en="Exclusion operations">Hariç tutma işlemleri</li>
+                                        <li data-tr="Negatif filtreleme" data-en="Negative filtering">Negatif filtreleme</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Basic NOT usage
+filter := bson.D{{"age", bson.D{{"$not", bson.D{{"$lt", 18}}}}}}
+
+// Complex NOT condition
+filter := bson.D{{"$not", bson.D{{"$or", bson.A{
+    bson.D{{"status", "deleted"}},
+    bson.D{{"status", "inactive"}},
+}}}}}
+
+// NOT with regex
+filter := bson.D{{"name", bson.D{{"$not", bson.D{{"$regex", "^test"}}}}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$nor</code> <span data-tr=": Hiçbir koşulun sağlanmaması gereken sorgular için kullanılır." data-en=": Used for queries where none of the conditions should be met.">: Hiçbir koşulun sağlanmaması gereken sorgular için kullanılır.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Hariç tutma listesi" data-en="Exclusion list">Hariç tutma listesi</li>
+                                        <li data-tr="Negatif filtreleme" data-en="Negative filtering">Negatif filtreleme</li>
+                                        <li data-tr="Çoklu koşul dışlama" data-en="Multiple condition exclusion">Çoklu koşul dışlama</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Basic NOR usage
+filter := bson.D{{"$nor", bson.A{
+    bson.D{{"status", "deleted"}},
+    bson.D{{"status", "inactive"}},
+}}}
+
+// Complex NOR conditions
+filter := bson.D{{"$nor", bson.A{
+    bson.D{{"age", bson.D{{"$lt", 18}}}},
+    bson.D{{"status", "inactive"}},
+    bson.D{{"category", "restricted"}},
+}}}
+
+// NOR with other operators
+filter := bson.D{{"$nor", bson.A{
+    bson.D{{"price", bson.D{{"$gt", 1000}}}},
+    bson.D{{"stock", bson.D{{"$lt", 5}}}},
+}}}</code></pre>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </section>
 
@@ -108,17 +346,55 @@ filter := bson.D{{"$or", bson.A{
                     <div class="card">
                         <h3 data-tr="Operatörler ve Açıklamaları" data-en="Operators and Descriptions">Operatörler ve Açıklamaları</h3>
                         <ul>
-                            <li><code>$exists</code> <span data-tr=": Belirtilen alanın belgede var olup olmadığını kontrol eder." data-en=": Checks if the specified field exists in the document.">: Belirtilen alanın belgede var olup olmadığını kontrol eder.</span></li>
-                            <li><code>$type</code> <span data-tr=": Alanın veri tipini kontrol eder." data-en=": Checks the data type of the field.">: Alanın veri tipini kontrol eder.</span></li>
-                        </ul>
-                    </div>
-                    <div class="card">
-                        <h3 data-tr="Örnek Kullanımlar" data-en="Example Usage">Örnek Kullanımlar</h3>
-                        <pre><code class="language-go">// $exists example: Find users with email field
+                            <li>
+                                <code>$exists</code> <span data-tr=": Belirtilen alanın belgede var olup olmadığını kontrol eder." data-en=": Checks if the specified field exists in the document.">: Belirtilen alanın belgede var olup olmadığını kontrol eder.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Zorunlu alan kontrolü" data-en="Required field check">Zorunlu alan kontrolü</li>
+                                        <li data-tr="Eksik veri tespiti" data-en="Missing data detection">Eksik veri tespiti</li>
+                                        <li data-tr="Şema doğrulama" data-en="Schema validation">Şema doğrulama</li>
+                                    </ul>
+                                        <pre><code class="language-go">// Basic existence check
 filter := bson.D{{"email", bson.D{{"$exists", true}}}}
 
-// $type example: Find users with age field as number type
-filter := bson.D{{"age", bson.D{{"$type", "number"}}}}</code></pre>
+// Missing field check
+filter := bson.D{{"phone", bson.D{{"$exists", false}}}}
+
+// Multiple field check
+filter := bson.D{{"$and", bson.A{
+    bson.D{{"name", bson.D{{"$exists", true}}}},
+    bson.D{{"age", bson.D{{"$exists", true}}}},
+    bson.D{{"email", bson.D{{"$exists", true}}}},
+}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$type</code> <span data-tr=": Alanın veri tipini kontrol eder." data-en=": Checks the data type of the field.">: Alanın veri tipini kontrol eder.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Veri tipi doğrulama" data-en="Data type validation">Veri tipi doğrulama</li>
+                                        <li data-tr="Tip dönüşümü öncesi kontrol" data-en="Pre-conversion type check">Tip dönüşümü öncesi kontrol</li>
+                                        <li data-tr="Şema tutarlılığı kontrolü" data-en="Schema consistency check">Şema tutarlılığı kontrolü</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Numerical type check
+filter := bson.D{{"age", bson.D{{"$type", "number"}}}}
+
+// Array type check
+filter := bson.D{{"tags", bson.D{{"$type", "array"}}}}
+
+// Multiple type check
+filter := bson.D{{"$or", bson.A{
+    bson.D{{"price", bson.D{{"$type", "number"}}}},
+    bson.D{{"price", bson.D{{"$type", "string"}}}},
+}}}
+
+// Date type check
+filter := bson.D{{"createdAt", bson.D{{"$type", "date"}}}}</code></pre>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </section>
 
@@ -127,20 +403,130 @@ filter := bson.D{{"age", bson.D{{"$type", "number"}}}}</code></pre>
                     <div class="card">
                         <h3 data-tr="Operatörler ve Açıklamaları" data-en="Operators and Descriptions">Operatörler ve Açıklamaları</h3>
                         <ul>
-                            <li><code>$expr</code> <span data-tr=": Sorgu içinde ifadeler kullanmayı sağlar." data-en=": Allows using expressions within queries.">: Sorgu içinde ifadeler kullanmayı sağlar.</span></li>
-                            <li><code>$jsonSchema</code> <span data-tr=": JSON şemasına göre doğrulama yapar." data-en=": Validates against a JSON schema.">: JSON şemasına göre doğrulama yapar.</span></li>
-                            <li><code>$mod</code> <span data-tr=": Modül işlemi yapar." data-en=": Performs modulo operation.">: Modül işlemi yapar.</span></li>
-                            <li><code>$regex</code> <span data-tr=": Düzenli ifade ile eşleştirme yapar." data-en=": Performs pattern matching using regular expressions.">: Düzenli ifade ile eşleştirme yapar.</span></li>
-                            <li><code>$where</code> <span data-tr=": JavaScript ifadeleri kullanmayı sağlar." data-en=": Allows using JavaScript expressions.">: JavaScript ifadeleri kullanmayı sağlar.</span></li>
-                        </ul>
-                    </div>
-                    <div class="card">
-                        <h3 data-tr="Örnek Kullanımlar" data-en="Example Usage">Örnek Kullanımlar</h3>
-                        <pre><code class="language-go">// $expr example: Find products where price is higher than cost
+                            <li>
+                                <code>$expr</code> <span data-tr=": Sorgu içinde ifadeler kullanmayı sağlar." data-en=": Allows using expressions within queries.">: Sorgu içinde ifadeler kullanmayı sağlar.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Alanlar arası karşılaştırma" data-en="Field comparison">Alanlar arası karşılaştırma</li>
+                                        <li data-tr="Matematiksel işlemler" data-en="Mathematical operations">Matematiksel işlemler</li>
+                                        <li data-tr="Karmaşık koşullar" data-en="Complex conditions">Karmaşık koşullar</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Field comparison
 filter := bson.D{{"$expr", bson.D{{"$gt", []string{"$price", "$cost"}}}}}
 
-// $regex example: Find users whose name starts with "A"
-filter := bson.D{{"name", bson.D{{"$regex", "^A"}}}}</code></pre>
+// Mathematical operation
+filter := bson.D{{"$expr", bson.D{{"$gt", []interface{}{
+    bson.D{{"$multiply", []interface{}{"$quantity", "$price"}}},
+    1000,
+}}}}}
+
+// Complex condition
+filter := bson.D{{"$expr", bson.D{{"$and", []interface{}{
+    bson.D{{"$gt", []string{"$price", "$cost"}}},
+    bson.D{{"$gt", []interface{}{"$stock", 0}}},
+}}}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$jsonSchema</code> <span data-tr=": JSON şemasına göre doğrulama yapar." data-en=": Validates against a JSON schema.">: JSON şemasına göre doğrulama yapar.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Şema doğrulama" data-en="Schema validation">Şema doğrulama</li>
+                                        <li data-tr="Veri yapısı kontrolü" data-en="Data structure check">Veri yapısı kontrolü</li>
+                                        <li data-tr="Alan kısıtlamaları" data-en="Field constraints">Alan kısıtlamaları</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Basic schema validation
+filter := bson.D{{"$jsonSchema", bson.D{
+    {"bsonType", "object"},
+    {"required", []string{"name", "age", "email"}},
+    {"properties", bson.D{
+        {"name", bson.D{{"bsonType", "string"}}},
+        {"age", bson.D{{"bsonType", "int"}}},
+        {"email", bson.D{{"bsonType", "string"}}},
+    }},
+}}}
+
+// Complex schema validation
+filter := bson.D{{"$jsonSchema", bson.D{
+    {"bsonType", "object"},
+    {"required", []string{"name", "scores"}},
+    {"properties", bson.D{
+        {"name", bson.D{{"bsonType", "string"}}},
+        {"scores", bson.D{
+            {"bsonType", "array"},
+            {"items", bson.D{{"bsonType", "int"}}},
+            {"minItems", 1},
+        }},
+    }},
+}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$mod</code> <span data-tr=": Modül işlemi yapar." data-en=": Performs modulo operation.">: Modül işlemi yapar.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Çift/tek sayı kontrolü" data-en="Even/odd number check">Çift/tek sayı kontrolü</li>
+                                        <li data-tr="Belirli aralıklarla filtreleme" data-en="Filtering at specific intervals">Belirli aralıklarla filtreleme</li>
+                                        <li data-tr="Sayısal gruplama" data-en="Numeric grouping">Sayısal gruplama</li>
+                                    </ul>
+                                        <pre><code class="language-go">// Even number check
+filter := bson.D{{"number", bson.D{{"$mod", []int{2, 0}}}}}
+
+// Multiples of 5
+filter := bson.D{{"value", bson.D{{"$mod", []int{5, 0}}}}}
+
+// Complex mod operation
+filter := bson.D{{"$expr", bson.D{{"$eq", []interface{}{
+    bson.D{{"$mod", []interface{}{"$number", 3}}},
+    0,
+}}}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$regex</code> <span data-tr=": Düzenli ifade ile eşleştirme yapar." data-en=": Performs pattern matching using regular expressions.">: Düzenli ifade ile eşleştirme yapar.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Metin arama" data-en="Text search">Metin arama</li>
+                                        <li data-tr="Desen eşleştirme" data-en="Pattern matching">Desen eşleştirme</li>
+                                        <li data-tr="Kısmi eşleşme" data-en="Partial matching">Kısmi eşleşme</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Basic text search
+filter := bson.D{{"name", bson.D{{"$regex", "john", "i"}}}}
+
+// Complex pattern matching
+filter := bson.D{{"email", bson.D{{"$regex", "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"}}}}
+
+// Multiple condition with regex
+filter := bson.D{{"$and", bson.A{
+    bson.D{{"name", bson.D{{"$regex", "^A"}}}},
+    bson.D{{"email", bson.D{{"$regex", "@gmail\\.com$"}}}},
+}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$where</code> <span data-tr=": JavaScript ifadeleri kullanmayı sağlar." data-en=": Allows using JavaScript expressions.">: JavaScript ifadeleri kullanmayı sağlar.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Karmaşık hesaplamalar" data-en="Complex calculations">Karmaşık hesaplamalar</li>
+                                        <li data-tr="JavaScript fonksiyonları" data-en="JavaScript functions">JavaScript fonksiyonları</li>
+                                        <li data-tr="Özel filtreleme mantığı" data-en="Custom filtering logic">Özel filtreleme mantığı</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Basic JavaScript expression
+filter := bson.D{{"$where", "this.age > 18"}}
+
+// Complex JavaScript function
+filter := bson.D{{"$where", "function() { return this.price * this.quantity > 1000 }"}}
+
+// Date comparison
+filter := bson.D{{"$where", "this.createdAt > new Date('2024-01-01')"}}</code></pre>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </section>
 
@@ -149,21 +535,83 @@ filter := bson.D{{"name", bson.D{{"$regex", "^A"}}}}</code></pre>
                     <div class="card">
                         <h3 data-tr="Operatörler ve Açıklamaları" data-en="Operators and Descriptions">Operatörler ve Açıklamaları</h3>
                         <ul>
-                            <li><code>$all</code> <span data-tr=": Belirtilen tüm öğeleri içeren dizileri bulur." data-en=": Finds arrays that contain all specified elements.">: Belirtilen tüm öğeleri içeren dizileri bulur.</span></li>
-                            <li><code>$elemMatch</code> <span data-tr=": Dizi içindeki öğelerin belirli koşulları sağlaması gereken belgeleri bulur." data-en=": Finds documents where array elements match specified conditions.">: Dizi içindeki öğelerin belirli koşulları sağlaması gereken belgeleri bulur.</span></li>
-                            <li><code>$size</code> <span data-tr=": Belirli boyuttaki dizileri bulur." data-en=": Finds arrays of specified size.">: Belirli boyuttaki dizileri bulur.</span></li>
-                        </ul>
-                    </div>
-                    <div class="card">
-                        <h3 data-tr="Örnek Kullanımlar" data-en="Example Usage">Örnek Kullanımlar</h3>
-                        <pre><code class="language-go">// $all example: Find documents with both "go" and "mongodb" tags
-filter := bson.D{{"tags", bson.D{{"$all", []string{"go", "mongodb"}}}}}
+                            <li>
+                                <code>$all</code> <span data-tr=": Belirtilen tüm öğeleri içeren dizileri bulur." data-en=": Finds arrays that contain all specified elements.">: Belirtilen tüm öğeleri içeren dizileri bulur.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Etiket kontrolü" data-en="Tag check">Etiket kontrolü</li>
+                                        <li data-tr="Yetenek eşleştirme" data-en="Skill matching">Yetenek eşleştirme</li>
+                                        <li data-tr="Çoklu özellik kontrolü" data-en="Multiple property check">Çoklu özellik kontrolü</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Basic tag check
+filter := bson.D{{"tags", bson.D{{"$all", []string{"mongodb", "go"}}}}}
 
-// $elemMatch example: Find students who scored above 90 in mathematics
+// Skill matching
+filter := bson.D{{"skills", bson.D{{"$all", []string{"javascript", "react", "nodejs"}}}}}
+
+// Complex array check
+filter := bson.D{{"$and", bson.A{
+    bson.D{{"tags", bson.D{{"$all", []string{"backend", "database"}}}}},
+    bson.D{{"languages", bson.D{{"$all", []string{"go", "python"}}}}},
+}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$elemMatch</code> <span data-tr=": Dizi içindeki öğelerin belirli koşulları sağlaması gereken belgeleri bulur." data-en=": Finds documents where array elements match specified conditions.">: Dizi içindeki öğelerin belirli koşulları sağlaması gereken belgeleri bulur.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Karmaşık dizi filtreleme" data-en="Complex array filtering">Karmaşık dizi filtreleme</li>
+                                        <li data-tr="Çoklu koşul eşleştirme" data-en="Multiple condition matching">Çoklu koşul eşleştirme</li>
+                                        <li data-tr="İç içe dizi kontrolü" data-en="Nested array check">İç içe dizi kontrolü</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Basic elemMatch usage
 filter := bson.D{{"scores", bson.D{{"$elemMatch", bson.D{
     {"subject", "mathematics"},
     {"score", bson.D{{"$gt", 90}}},
+}}}}}
+
+// Multiple condition elemMatch
+filter := bson.D{{"comments", bson.D{{"$elemMatch", bson.D{
+    {"author", "John"},
+    {"rating", bson.D{{"$gt", 4}}},
+    {"date", bson.D{{"$gt", time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)}}},
+}}}}}
+
+// Nested array check
+filter := bson.D{{"orders", bson.D{{"$elemMatch", bson.D{
+    {"items", bson.D{{"$elemMatch", bson.D{
+        {"product", "laptop"},
+        {"quantity", bson.D{{"$gt", 1}}},
+    }}}},
+    {"status", "completed"},
 }}}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$size</code> <span data-tr=": Belirli boyuttaki dizileri bulur." data-en=": Finds arrays of specified size.">: Belirli boyuttaki dizileri bulur.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Dizi uzunluğu kontrolü" data-en="Array length check">Dizi uzunluğu kontrolü</li>
+                                        <li data-tr="Boş dizi kontrolü" data-en="Empty array check">Boş dizi kontrolü</li>
+                                        <li data-tr="Minimum/maksimum uzunluk kontrolü" data-en="Minimum/maximum length check">Minimum/maksimum uzunluk kontrolü</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Specific length check
+filter := bson.D{{"tags", bson.D{{"$size", 3}}}}
+
+// Empty array check
+filter := bson.D{{"comments", bson.D{{"$size", 0}}}}
+
+// Complex length check
+filter := bson.D{{"$and", bson.A{
+    bson.D{{"$expr", bson.D{{"$gt", []interface{}{bson.D{{"$size", "$items"}}, 0}}}}},
+    bson.D{{"$expr", bson.D{{"$lte", []interface{}{bson.D{{"$size", "$items"}}, 10}}}}},
+}}}</code></pre>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </section>
 
@@ -172,26 +620,132 @@ filter := bson.D{{"scores", bson.D{{"$elemMatch", bson.D{
                     <div class="card">
                         <h3 data-tr="Operatörler ve Açıklamaları" data-en="Operators and Descriptions">Operatörler ve Açıklamaları</h3>
                         <ul>
-                            <li><code>$set</code> <span data-tr=": Belge alanlarını günceller." data-en=": Updates document fields.">: Belge alanlarını günceller.</span></li>
-                            <li><code>$inc</code> <span data-tr=": Sayısal değerleri artırır/azaltır." data-en=": Increments/decrements numeric values.">: Sayısal değerleri artırır/azaltır.</span></li>
-                            <li><code>$mul</code> <span data-tr=": Sayısal değerleri çarpar." data-en=": Multiplies numeric values.">: Sayısal değerleri çarpar.</span></li>
-                            <li><code>$rename</code> <span data-tr=": Alan adlarını değiştirir." data-en=": Renames field names.">: Alan adlarını değiştirir.</span></li>
-                            <li><code>$unset</code> <span data-tr=": Alanları siler." data-en=": Removes fields.">: Alanları siler.</span></li>
-                        </ul>
-                    </div>
-                    <div class="card">
-                        <h3 data-tr="Örnek Kullanımlar" data-en="Example Usage">Örnek Kullanımlar</h3>
-                        <pre><code class="language-go">// $set example: Update document fields
+                            <li>
+                                <code>$set</code> <span data-tr=": Belge alanlarını günceller." data-en=": Updates document fields.">: Belge alanlarını günceller.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Tek alan güncelleme" data-en="Single field update">Tek alan güncelleme</li>
+                                        <li data-tr="Çoklu alan güncelleme" data-en="Multiple field update">Çoklu alan güncelleme</li>
+                                        <li data-tr="İç içe alan güncelleme" data-en="Nested field update">İç içe alan güncelleme</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Single field update
+update := bson.D{{"$set", bson.D{{"status", "active"}}}}
+
+// Multiple field update
 update := bson.D{{"$set", bson.D{
     {"status", "updated"},
     {"lastModified", time.Now()},
+    {"version", 2},
 }}}
 
-// $inc example: Increment/decrement numeric values
-update := bson.D{{"$inc", bson.D{
-    {"viewCount", 1},
-    {"score", 5},
+// Nested field update
+update := bson.D{{"$set", bson.D{
+    {"profile.name", "John Doe"},
+    {"profile.email", "john@example.com"},
+    {"settings.notifications", true},
 }}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$inc</code> <span data-tr=": Sayısal değerleri artırır/azaltır." data-en=": Increments/decrements numeric values.">: Sayısal değerleri artırır/azaltır.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Sayaç artırma/azaltma" data-en="Counter increment/decrement">Sayaç artırma/azaltma</li>
+                                        <li data-tr="Stok güncelleme" data-en="Stock update">Stok güncelleme</li>
+                                        <li data-tr="Puan hesaplama" data-en="Score calculation">Puan hesaplama</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Counter increment
+update := bson.D{{"$inc", bson.D{{"viewCount", 1}}}}
+
+// Multiple counter update
+update := bson.D{{"$inc", bson.D{
+    {"stock", -1},
+    {"soldCount", 1},
+    {"totalRevenue", 99.99},
+}}}
+
+// Decrement with negative value
+update := bson.D{{"$inc", bson.D{{"balance", -50}}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$mul</code> <span data-tr=": Sayısal değerleri çarpar." data-en=": Multiplies numeric values.">: Sayısal değerleri çarpar.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Fiyat güncelleme" data-en="Price update">Fiyat güncelleme</li>
+                                        <li data-tr="İndirim uygulama" data-en="Apply discount">İndirim uygulama</li>
+                                        <li data-tr="Ölçek değiştirme" data-en="Scale change">Ölçek değiştirme</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Price update
+update := bson.D{{"$mul", bson.D{{"price", 1.1}}}} // %10 increase
+
+// Discount application
+update := bson.D{{"$mul", bson.D{{"price", 0.8}}}} // %20 discount
+
+// Multiple field multiplication
+update := bson.D{{"$mul", bson.D{
+    {"width", 2.54},  
+    {"height", 2.54},
+    {"depth", 2.54},
+}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$rename</code> <span data-tr=": Alan adlarını değiştirir." data-en=": Renames field names.">: Alan adlarını değiştirir.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Alan adı değiştirme" data-en="Field name change">Alan adı değiştirme</li>
+                                        <li data-tr="Şema güncelleme" data-en="Schema update">Şema güncelleme</li>
+                                        <li data-tr="İç içe alan yeniden adlandırma" data-en="Nested field rename">İç içe alan yeniden adlandırma</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Single field rename
+update := bson.D{{"$rename", bson.D{{"oldName", "newName"}}}}
+
+// Multiple field rename
+update := bson.D{{"$rename", bson.D{
+    {"firstName", "name"},
+    {"lastName", "surname"},
+    {"emailAddress", "email"},
+}}}
+
+// Nested field rename
+update := bson.D{{"$rename", bson.D{
+    {"user.profile.name", "user.profile.fullName"},
+    {"user.settings.preferences", "user.settings.options"},
+}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$unset</code> <span data-tr=": Alanları siler." data-en=": Removes fields.">: Alanları siler.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Tek alan silme" data-en="Single field deletion">Tek alan silme</li>
+                                        <li data-tr="Çoklu alan silme" data-en="Multiple field deletion">Çoklu alan silme</li>
+                                        <li data-tr="İç içe alan silme" data-en="Nested field deletion">İç içe alan silme</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Single field deletion
+update := bson.D{{"$unset", bson.D{{"temporaryField", ""}}}}
+
+// Multiple field deletion
+update := bson.D{{"$unset", bson.D{
+    {"oldField1", ""},
+    {"oldField2", ""},
+    {"deprecatedField", ""},
+}}}
+
+// Nested field deletion
+update := bson.D{{"$unset", bson.D{
+    {"user.tempData", ""},
+    {"user.oldSettings", ""},
+}}}</code></pre>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </section>
 
@@ -200,27 +754,166 @@ update := bson.D{{"$inc", bson.D{
                     <div class="card">
                         <h3 data-tr="Operatörler ve Açıklamaları" data-en="Operators and Descriptions">Operatörler ve Açıklamaları</h3>
                         <ul>
-                            <li><code>$</code> <span data-tr=": Eşleşen ilk öğeyi günceller." data-en=": Updates the first matching element.">: Eşleşen ilk öğeyi günceller.</span></li>
-                            <li><code>$[]</code> <span data-tr=": Tüm eşleşen öğeleri günceller." data-en=": Updates all matching elements.">: Tüm eşleşen öğeleri günceller.</span></li>
-                            <li><code>$[<identifier>]</code> <span data-tr=": Belirli koşullara göre öğeleri günceller." data-en=": Updates elements based on specific conditions.">: Belirli koşullara göre öğeleri günceller.</span></li>
-                            <li><code>$addToSet</code> <span data-tr=": Tekrarsız öğe ekler." data-en=": Adds unique elements.">: Tekrarsız öğe ekler.</span></li>
-                            <li><code>$pop</code> <span data-tr=": İlk veya son öğeyi kaldırır." data-en=": Removes first or last element.">: İlk veya son öğeyi kaldırır.</span></li>
-                            <li><code>$pull</code> <span data-tr=": Koşula uyan öğeleri kaldırır." data-en=": Removes elements matching a condition.">: Koşula uyan öğeleri kaldırır.</span></li>
-                            <li><code>$push</code> <span data-tr=": Yeni öğe ekler." data-en=": Adds new elements.">: Yeni öğe ekler.</span></li>
-                        </ul>
-                    </div>
-                    <div class="card">
-                        <h3 data-tr="Örnek Kullanımlar" data-en="Example Usage">Örnek Kullanımlar</h3>
-                        <pre><code class="language-go">// $push and $each example: Add new tags
-update := bson.D{{"$push", bson.D{
-    {"tags", bson.D{
-        {"$each", []string{"new", "tags"}},
-        {"$slice", 5},
-    }},
-}}}
+                            <li>
+                                <code>$</code> <span data-tr=": Sorgu koşuluyla eşleşen dizideki ilk öğeyi günceller." data-en=": Updates the first matching element.">: Sorgu koşuluyla eşleşen dizideki ilk öğeyi günceller.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="İlk eşleşen öğeyi seçme" data-en="Selecting first matching element">İlk eşleşen öğeyi seçme</li>
+                                        <li data-tr="Koşullu dizi filtreleme" data-en="Conditional array filtering">Koşullu dizi filtreleme</li>
+                                        <li data-tr="Tekil öğe filtreleme" data-en="Single element filtering">Tekil öğe filtreleme</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Select first matching element
+filter := bson.D{{"scores", bson.D{{"$gt", 90}}}}
+projection := bson.D{{"scores.$", 1}}
 
-// $pull example: Remove old tags
-update := bson.D{{"$pull", bson.D{{"tags", "old"}}}}</code></pre>
+// Conditional projection
+filter := bson.D{{"items", bson.D{{"$elemMatch", bson.D{{"status", "active"}}}}}}
+projection := bson.D{{"items.$", 1}}
+
+// Nested array projection
+filter := bson.D{{"orders.items", bson.D{{"$elemMatch", bson.D{{"product", "laptop"}}}}}}
+projection := bson.D{{"orders.$.items.$", 1}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$[]</code> <span data-tr=": Tüm eşleşen öğeleri günceller." data-en=": Updates all matching elements.">: Tüm eşleşen öğeleri günceller.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Toplu dizi güncelleme" data-en="Bulk array update">Toplu dizi güncelleme</li>
+                                        <li data-tr="Tüm öğeleri değiştirme" data-en="Changing all elements">Tüm öğeleri değiştirme</li>
+                                        <li data-tr="Çoklu dizi işlemi" data-en="Multiple array operation">Çoklu dizi işlemi</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Update all elements
+update := bson.D{{"$set", bson.D{{"scores.$[].status", "reviewed"}}}}
+
+// Multiple array update
+update := bson.D{{"$mul", bson.D{{"prices.$[]", 1.1}}}} // Tüm fiyatları %10 artır
+
+// Nested array update
+update := bson.D{{"$set", bson.D{{"orders.$[].items.$[].discount", 0.2}}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$[<identifier>]</code> <span data-tr=": Belirli koşullara göre öğeleri günceller." data-en=": Updates elements based on specific conditions.">: Belirli koşullara göre öğeleri günceller.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Filtreli dizi güncelleme" data-en="Filtered array update">Filtreli dizi güncelleme</li>
+                                        <li data-tr="Koşullu toplu güncelleme" data-en="Conditional bulk update">Koşullu toplu güncelleme</li>
+                                        <li data-tr="Özel dizi filtreleme" data-en="Custom array filtering">Özel dizi filtreleme</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Filtered update
+filter := bson.D{{"items", bson.D{{"$elemMatch", bson.D{{"price", bson.D{{"$gt", 100}}}}}}}}
+update := bson.D{{"$set", bson.D{{"items.$[elem].discount", 0.2}}}}
+opts := options.Update().SetArrayFilters(options.ArrayFilters{
+    Filters: []interface{}{bson.D{{"elem.price", bson.D{{"$gt", 100}}}}},
+})
+
+// Multiple conditional update
+filter := bson.D{{"orders", bson.D{{"$elemMatch", bson.D{{"status", "pending"}}}}}}
+update := bson.D{{"$set", bson.D{{"orders.$[order].status", "processing"}}}}
+opts := options.Update().SetArrayFilters(options.ArrayFilters{
+    Filters: []interface{}{bson.D{{"order.status", "pending"}}},
+})</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$addToSet</code> <span data-tr=": Tekrarsız öğe ekler." data-en=": Adds unique elements.">: Tekrarsız öğe ekler.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Benzersiz değer ekleme" data-en="Adding unique values">Benzersiz değer ekleme</li>
+                                        <li data-tr="Etiket yönetimi" data-en="Tag management">Etiket yönetimi</li>
+                                        <li data-tr="Çoklu öğe ekleme" data-en="Multiple element addition">Çoklu öğe ekleme</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Single element addition
+update := bson.D{{"$addToSet", bson.D{{"tags", "new"}}}}
+
+// Multiple element addition
+update := bson.D{{"$addToSet", bson.D{{"tags", bson.D{
+    {"$each", []string{"tag1", "tag2", "tag3"}},
+}}}}}
+
+// Complex element addition
+update := bson.D{{"$addToSet", bson.D{{"categories", bson.D{
+    {"$each", []string{"electronics", "gadgets"}},
+    {"$slice", 5}, // Maximum 5 elements
+}}}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$pop</code> <span data-tr=": İlk veya son öğeyi kaldırır." data-en=": Removes first or last element.">: İlk veya son öğeyi kaldırır.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Son öğeyi kaldırma" data-en="Removing last element">Son öğeyi kaldırma</li>
+                                        <li data-tr="İlk öğeyi kaldırma" data-en="Removing first element">İlk öğeyi kaldırma</li>
+                                        <li data-tr="Kuyruk işlemleri" data-en="Queue operations">Kuyruk işlemleri</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Remove last element
+update := bson.D{{"$pop", bson.D{{"items", 1}}}}
+
+// Remove first element
+update := bson.D{{"$pop", bson.D{{"queue", -1}}}}
+
+// Multiple array operation
+update := bson.D{{"$pop", bson.D{
+    {"items", 1},    // Remove last element
+    {"queue", -1},   // Remove first element
+}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$pull</code> <span data-tr=": Koşula uyan öğeleri kaldırır." data-en=": Removes elements matching a condition.">: Koşula uyan öğeleri kaldırır.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Değere göre kaldırma" data-en="Removal by value">Değere göre kaldırma</li>
+                                        <li data-tr="Koşullu kaldırma" data-en="Conditional removal">Koşullu kaldırma</li>
+                                        <li data-tr="Çoklu öğe kaldırma" data-en="Multiple element removal">Çoklu öğe kaldırma</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Remove by value
+update := bson.D{{"$pull", bson.D{{"tags", "old"}}}}
+
+// Conditional removal
+update := bson.D{{"$pull", bson.D{{"items", bson.D{
+    {"price", bson.D{{"$lt", 10}}},
+}}}}}
+
+// Multiple conditional removal
+update := bson.D{{"$pull", bson.D{{"comments", bson.D{
+    {"author", "John"},
+    {"rating", bson.D{{"$lt", 3}}},
+}}}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$push</code> <span data-tr=": Yeni öğe ekler." data-en=": Adds new elements.">: Yeni öğe ekler.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Tek öğe ekleme" data-en="Single element addition">Tek öğe ekleme</li>
+                                        <li data-tr="Çoklu öğe ekleme" data-en="Multiple element addition">Çoklu öğe ekleme</li>
+                                        <li data-tr="Dizi sınırlama" data-en="Array limiting">Dizi sınırlama</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Single element addition
+update := bson.D{{"$push", bson.D{{"items", "new item"}}}}
+
+// Multiple element addition
+update := bson.D{{"$push", bson.D{{"items", bson.D{
+    {"$each", []string{"item1", "item2", "item3"}},
+}}}}}
+
+// Array limiting with addition
+update := bson.D{{"$push", bson.D{{"recentItems", bson.D{
+    {"$each", []string{"item1", "item2"}},
+    {"$slice", -5},  // Keep last 5 elements
+}}}}}</code></pre>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </section>
 
@@ -229,19 +922,109 @@ update := bson.D{{"$pull", bson.D{{"tags", "old"}}}}</code></pre>
                     <div class="card">
                         <h3 data-tr="Operatörler ve Açıklamaları" data-en="Operators and Descriptions">Operatörler ve Açıklamaları</h3>
                         <ul>
-                            <li><code>$</code> <span data-tr=": Sorgu koşuluyla eşleşen dizideki ilk öğeyi yansıtır." data-en=": Projects the first element in an array that matches the query condition.">: Sorgu koşuluyla eşleşen dizideki ilk öğeyi yansıtır.</span></li>
-                            <li><code>$elemMatch</code> <span data-tr=": Belirtilen koşulla eşleşen dizideki ilk öğeyi yansıtır." data-en=": Projects the first element in an array that matches the specified condition.">: Belirtilen koşulla eşleşen dizideki ilk öğeyi yansıtır.</span></li>
-                            <li><code>$meta</code> <span data-tr=": Meta verileri yansıtır." data-en=": Projects metadata.">: Meta verileri yansıtır.</span></li>
-                            <li><code>$slice</code> <span data-tr=": Diziden belirli sayıda öğe yansıtır." data-en=": Projects a specified number of elements from an array.">: Diziden belirli sayıda öğe yansıtır.</span></li>
-                        </ul>
-                    </div>
-                    <div class="card">
-                        <h3 data-tr="Örnek Kullanımlar" data-en="Example Usage">Örnek Kullanımlar</h3>
-                        <pre><code class="language-go">// $slice example: Show last 5 comments
+                            <li>
+                                <code>$</code> <span data-tr=": Sorgu koşuluyla eşleşen dizideki ilk öğeyi yansıtır." data-en=": Projects the first element in an array that matches the query condition.">: Sorgu koşuluyla eşleşen dizideki ilk öğeyi yansıtır.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="İlk eşleşen öğeyi seçme" data-en="Selecting first matching element">İlk eşleşen öğeyi seçme</li>
+                                        <li data-tr="Koşullu dizi filtreleme" data-en="Conditional array filtering">Koşullu dizi filtreleme</li>
+                                        <li data-tr="Tekil öğe filtreleme" data-en="Single element filtering">Tekil öğe filtreleme</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Select first matching element
+filter := bson.D{{"scores", bson.D{{"$gt", 90}}}}
+projection := bson.D{{"scores.$", 1}}
+
+// Conditional projection
+filter := bson.D{{"items", bson.D{{"$elemMatch", bson.D{{"status", "active"}}}}}}
+projection := bson.D{{"items.$", 1}}
+
+// Nested array projection
+filter := bson.D{{"orders.items", bson.D{{"$elemMatch", bson.D{{"product", "laptop"}}}}}}
+projection := bson.D{{"orders.$.items.$", 1}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$elemMatch</code> <span data-tr=": Belirtilen koşulla eşleşen dizideki ilk öğeyi yansıtır." data-en=": Projects the first element in an array that matches the specified condition.">: Belirtilen koşulla eşleşen dizideki ilk öğeyi yansıtır.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Çoklu koşul projeksiyonu" data-en="Multiple condition projection">Çoklu koşul projeksiyonu</li>
+                                        <li data-tr="Karmaşık dizi filtreleme" data-en="Complex array filtering">Karmaşık dizi filtreleme</li>
+                                        <li data-tr="Özel eşleşme projeksiyonu" data-en="Custom match projection">Özel eşleşme projeksiyonu</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Multiple condition projection
+projection := bson.D{{"scores", bson.D{{"$elemMatch", bson.D{
+    {"subject", "math"},
+    {"score", bson.D{{"$gt", 90}}},
+}}}}}
+
+// Complex projection
+projection := bson.D{{"comments", bson.D{{"$elemMatch", bson.D{
+    {"author", "John"},
+    {"rating", bson.D{{"$gt", 4}}},
+    {"date", bson.D{{"$gt", time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)}}},
+}}}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$meta</code> <span data-tr=": Meta verileri yansıtır." data-en=": Projects metadata.">: Meta verileri yansıtır.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Metin arama puanı" data-en="Text search score">Metin arama puanı</li>
+                                        <li data-tr="İndeks bilgisi" data-en="Index information">İndeks bilgisi</li>
+                                        <li data-tr="Özel meta veriler" data-en="Custom metadata">Özel meta veriler</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Text search score
+filter := bson.D{{"$text", bson.D{{"$search", "mongodb"}}}}
+projection := bson.D{
+    {"score", bson.D{{"$meta", "textScore"}}},
+    {"title", 1},
+}
+
+// Index information
+projection := bson.D{
+    {"_id", 1},
+    {"indexInfo", bson.D{{"$meta", "indexKey"}}},
+}
+
+// Complex metadata projection
+projection := bson.D{
+    {"title", 1},
+    {"description", 1},
+    {"searchScore", bson.D{{"$meta", "textScore"}}},
+    {"indexDetails", bson.D{{"$meta", "indexKey"}}},
+}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$slice</code> <span data-tr=": Diziden belirli sayıda öğe yansıtır." data-en=": Projects a specified number of elements from an array.">: Diziden belirli sayıda öğe yansıtır.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Belirli sayıda öğe seçme" data-en="Selecting specific number of elements">Belirli sayıda öğe seçme</li>
+                                        <li data-tr="Aralık bazlı seçim" data-en="Range-based selection">Aralık bazlı seçim</li>
+                                        <li data-tr="Son öğeleri alma" data-en="Getting last elements">Son öğeleri alma</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Select first 5 elements
 projection := bson.D{{"comments", bson.D{{"$slice", 5}}}}
 
-// $meta example: Show score in text search results
-projection := bson.D{{"score", bson.D{{"$meta", "textScore"}}}}</code></pre>
+// Select elements in a range
+projection := bson.D{{"items", bson.D{{"$slice", []int{5, 10}}}}}
+
+// Select last elements
+projection := bson.D{{"recentActivities", bson.D{{"$slice", -5}}}}
+
+// Complex slicing
+projection := bson.D{
+    {"comments", bson.D{{"$slice", 5}}},
+    {"recentOrders", bson.D{{"$slice", -3}}},
+    {"allItems", bson.D{{"$slice", []int{10, 20}}}},
+}</code></pre>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </section>
 
@@ -250,17 +1033,103 @@ projection := bson.D{{"score", bson.D{{"$meta", "textScore"}}}}</code></pre>
                     <div class="card">
                         <h3 data-tr="Operatörler ve Açıklamaları" data-en="Operators and Descriptions">Operatörler ve Açıklamaları</h3>
                         <ul>
-                            <li><code>$rand</code> <span data-tr=": Rastgele değer üretir." data-en=": Generates random values.">: Rastgele değer üretir.</span></li>
-                            <li><code>$natural</code> <span data-tr=": Doğal sıralama için kullanılır." data-en=": Used for natural ordering.">: Doğal sıralama için kullanılır.</span></li>
-                        </ul>
-                    </div>
-                    <div class="card">
-                        <h3 data-tr="Örnek Kullanımlar" data-en="Example Usage">Örnek Kullanımlar</h3>
-                        <pre><code class="language-go">// $rand example: Select random documents
+                            <li>
+                                <code>$rand</code> <span data-tr=": Rastgele değer üretir." data-en=": Generates random values.">: Rastgele değer üretir.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Rastgele belge seçimi" data-en="Random document selection">Rastgele belge seçimi</li>
+                                        <li data-tr="Örnekleme" data-en="Sampling">Örnekleme</li>
+                                        <li data-tr="Test verisi oluşturma" data-en="Test data generation">Test verisi oluşturma</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Random document selection
 filter := bson.D{{"$expr", bson.D{{"$gt", []interface{}{"$random", 0.5}}}}}
 
-// $natural example: Show documents in natural order
-opts := options.Find().SetHint(bson.D{{"$natural", 1}})</code></pre>
+// Select a specific number of documents
+pipeline := mongo.Pipeline{
+    {{"$sample", bson.D{{"size", 10}}}},
+}
+
+// Complex random selection
+filter := bson.D{{"$expr", bson.D{{"$and", []interface{}{
+    bson.D{{"$gt", []interface{}{"$random", 0.3}}},
+    bson.D{{"$lt", []interface{}{"$random", 0.7}}},
+}}}}}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$natural</code> <span data-tr=": Doğal sıralama için kullanılır." data-en=": Used for natural ordering.">: Doğal sıralama için kullanılır.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Fiziksel sıralama" data-en="Physical ordering">Fiziksel sıralama</li>
+                                        <li data-tr="Depolama sırası" data-en="Storage order">Depolama sırası</li>
+                                        <li data-tr="Performans optimizasyonu" data-en="Performance optimization">Performans optimizasyonu</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Query with natural ordering
+opts := options.Find().SetHint(bson.D{{"$natural", 1}})
+
+// Reverse natural ordering
+opts := options.Find().SetHint(bson.D{{"$natural", -1}})
+
+// Complex natural ordering
+pipeline := mongo.Pipeline{
+    {{"$sort", bson.D{{"$natural", 1}}}},
+    {{"$limit", 100}},
+}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$comment</code> <span data-tr=": Sorguya açıklama ekler." data-en=": Adds a comment to the query.">: Sorguya açıklama ekler.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Sorgu belgeleme" data-en="Query documentation">Sorgu belgeleme</li>
+                                        <li data-tr="Hata ayıklama" data-en="Debugging">Hata ayıklama</li>
+                                        <li data-tr="Performans izleme" data-en="Performance monitoring">Performans izleme</li>
+                                    </ul>
+                                    <pre><code class="language-go">// Simple comment
+filter := bson.D{{"$comment", "User search query"}} 
+
+// Complex comment
+filter := bson.D{
+    {"$and", bson.A{
+        bson.D{{"status", "active"}},
+        bson.D{{"age", bson.D{{"$gt", 18}}}},
+    }},
+    {"$comment", "Find active adult users"},
+}</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                <code>$explain</code> <span data-tr=": Sorgu planını açıklar." data-en=": Explains the query plan.">: Sorgu planını açıklar.</span>
+                                <div class="operator-details">
+                                    <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                                    <ul>
+                                        <li data-tr="Sorgu optimizasyonu" data-en="Query optimization">Sorgu optimizasyonu</li>
+                                        <li data-tr="Performans analizi" data-en="Performance analysis">Performans analizi</li>
+                                        <li data-tr="İndeks kullanımı kontrolü" data-en="Index usage check">İndeks kullanımı kontrolü</li>
+                                    </ul>
+                                        <pre><code class="language-go">// Query plan explanation
+opts := options.Find().SetExplain(true)
+
+// Detailed explanation
+opts := options.Find().
+    SetExplain(true).
+    SetVerbosity("executionStats")
+
+// Complex query analysis
+pipeline := mongo.Pipeline{
+    {{"$match", bson.D{{"status", "active"}}}},
+    {{"$group", bson.D{
+        {"_id", "$category"},
+        {"count", bson.D{{"$sum", 1}}},
+    }}},
+}
+opts := options.Aggregate().SetExplain(true)</code></pre>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </section>
 
@@ -268,19 +1137,34 @@ opts := options.Find().SetHint(bson.D{{"$natural", 1}})</code></pre>
                     <h2 data-tr="Örnek Kodlar" data-en="Example Codes">Örnek Kodlar</h2>
                     <div class="card">
                         <h3 data-tr="Metin Arama ve İndeksleme" data-en="Text Search and Indexing">Metin Arama ve İndeksleme</h3>
-                        <pre><code class="language-go">// Metin indeksi oluşturma
+                        <div class="operator-details">
+                            <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                            <ul>
+                                <li data-tr="Metin tabanlı arama" data-en="Text-based search">Metin tabanlı arama</li>
+                                <li data-tr="İçerik indeksleme" data-en="Content indexing">İçerik indeksleme</li>
+                                <li data-tr="Tam metin araması" data-en="Full-text search">Tam metin araması</li>
+                            </ul>
+                            <pre><code class="language-go">// Create text index
 indexModel := mongo.IndexModel{
     Keys: bson.D{{"description", "text"}},
 }
 name, err := collection.Indexes().CreateOne(context.TODO(), indexModel)
 
-// Metin arama örneği
-filter := bson.D{{"$text", bson.D{{"$search", "arama terimi"}}}}</code></pre>
+// Text search example
+filter := bson.D{{"$text", bson.D{{"$search", "search term"}}}}</code></pre>
+                        </div>
                     </div>
 
                     <div class="card">
                         <h3 data-tr="Agregasyon Pipeline" data-en="Aggregation Pipeline">Agregasyon Pipeline</h3>
-                        <pre><code class="language-go">pipeline := mongo.Pipeline{
+                        <div class="operator-details">
+                            <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                            <ul>
+                                <li data-tr="Veri analizi" data-en="Data analysis">Veri analizi</li>
+                                <li data-tr="İstatistiksel hesaplamalar" data-en="Statistical calculations">İstatistiksel hesaplamalar</li>
+                                <li data-tr="Veri dönüşümü" data-en="Data transformation">Veri dönüşümü</li>
+                            </ul>
+                            <pre><code class="language-go">pipeline := mongo.Pipeline{
     {{"$match", bson.D{{"status", "active"}}}},
     {{"$group", bson.D{
         {"_id", "$category"},
@@ -290,11 +1174,19 @@ filter := bson.D{{"$text", bson.D{{"$search", "arama terimi"}}}}</code></pre>
     {{"$limit", 10}},
 }
 cursor, err := collection.Aggregate(context.TODO(), pipeline)</code></pre>
+                        </div>
                     </div>
 
                     <div class="card">
                         <h3 data-tr="İşlemler (Transactions)" data-en="Transactions">İşlemler (Transactions)</h3>
-                        <pre><code class="language-go">session, err := client.StartSession()
+                        <div class="operator-details">
+                            <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                            <ul>
+                                <li data-tr="Atomik işlemler" data-en="Atomic operations">Atomik işlemler</li>
+                                <li data-tr="Veri tutarlılığı" data-en="Data consistency">Veri tutarlılığı</li>
+                                <li data-tr="Çoklu koleksiyon güncellemeleri" data-en="Multiple collection updates">Çoklu koleksiyon güncellemeleri</li>
+                            </ul>
+                            <pre><code class="language-go">session, err := client.StartSession()
 if err != nil {
     log.Fatal(err)
 }
@@ -305,8 +1197,8 @@ if err != nil {
     log.Fatal(err)
 }
 
-// İşlem içinde işlemler
-_, err = collection.InsertOne(session, bson.D{{"name", "Ali"}})
+// Operations within transaction
+_, err = collection.InsertOne(session, bson.D{{"name", "John"}})
 if err != nil {
     session.AbortTransaction(session)
     log.Fatal(err)
@@ -316,96 +1208,144 @@ err = session.CommitTransaction(session)
 if err != nil {
     log.Fatal(err)
 }</code></pre>
+                        </div>
                     </div>
 
                     <div class="card">
                         <h3 data-tr="Belge Sayma ve Benzersiz Değerler" data-en="Document Counting and Unique Values">Belge Sayma ve Benzersiz Değerler</h3>
-                        <pre><code class="language-go">// Yaklaşık belge sayısı
+                        <div class="operator-details">
+                            <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                            <ul>
+                                <li data-tr="İstatistiksel analiz" data-en="Statistical analysis">İstatistiksel analiz</li>
+                                <li data-tr="Veri doğrulama" data-en="Data validation">Veri doğrulama</li>
+                                <li data-tr="Performans optimizasyonu" data-en="Performance optimization">Performans optimizasyonu</li>
+                            </ul>
+                            <pre><code class="language-go">// Approximate document count
 count, err := collection.EstimatedDocumentCount(context.TODO())
 
-// Tam belge sayısı
+// Exact document count
 count, err := collection.CountDocuments(context.TODO(), filter)
 
-// Benzersiz değerler
+// Unique values
 results, err := collection.Distinct(context.TODO(), "field", filter)</code></pre>
+                        </div>
                     </div>
 
                     <div class="card">
                         <h3 data-tr="ObjectId Dönüşümleri" data-en="ObjectId Conversions">ObjectId Dönüşümleri</h3>
-                        <pre><code class="language-go">// String'den ObjectId'ye dönüşüm
+                        <div class="operator-details">
+                            <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                            <ul>
+                                <li data-tr="ID dönüşümleri" data-en="ID conversions">ID dönüşümleri</li>
+                                <li data-tr="Veri doğrulama" data-en="Data validation">Veri doğrulama</li>
+                                <li data-tr="API entegrasyonları" data-en="API integrations">API entegrasyonları</li>
+                            </ul>
+                            <pre><code class="language-go">// Convert from String to ObjectId
 objectId, err := primitive.ObjectIDFromHex("675d3a322979f406206c8341")
 if err != nil {
     log.Fatal(err)
 }
 
-// ObjectId'den String'e dönüşüm
+// Convert from ObjectId to String
 stringID := objectId.Hex()</code></pre>
+                        </div>
                     </div>
 
                     <div class="card">
                         <h3 data-tr="CountOptions Yapılandırması" data-en="CountOptions Configuration">CountOptions Yapılandırması</h3>
-                        <pre><code class="language-go">opts := options.Count().
-    SetCollation(&options.Collation{Locale: "tr"}).  // Dil sıralama türü
-    SetHint(bson.D{{"indexName", 1}}).              // Kullanılacak indeks
-    SetLimit(100).                                   // Maksimum belge sayısı
-    SetMaxTime(5 * time.Second).                     // Maksimum çalışma süresi
-    SetSkip(10)                                      // Atlanacak belge sayısı
+                        <div class="operator-details">
+                            <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                            <ul>
+                                <li data-tr="Gelişmiş sayım işlemleri" data-en="Advanced counting operations">Gelişmiş sayım işlemleri</li>
+                                <li data-tr="Performans optimizasyonu" data-en="Performance optimization">Performans optimizasyonu</li>
+                                <li data-tr="Dil bazlı sıralama" data-en="Language-based sorting">Dil bazlı sıralama</li>
+                            </ul>
+                            <pre><code class="language-go">opts := options.Count().
+    SetCollation(&options.Collation{Locale: "tr"}).  // Language sorting type
+    SetHint(bson.D{{"indexName", 1}}).              // Index to use
+    SetLimit(100).                                   // Maximum document count
+    SetMaxTime(5 * time.Second).                     // Maximum execution time
+    SetSkip(10)                                      // Number of documents to skip
 
 count, err := collection.CountDocuments(context.TODO(), filter, opts)</code></pre>
+                        </div>
                     </div>
 
                     <div class="card">
                         <h3 data-tr="Distinct Kullanımı" data-en="Distinct Usage">Distinct Kullanımı</h3>
-                        <pre><code class="language-go">// Belirli bir filtreye göre benzersiz değerleri alma
+                        <div class="operator-details">
+                            <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                            <ul>
+                                <li data-tr="Benzersiz değer analizi" data-en="Unique value analysis">Benzersiz değer analizi</li>
+                                <li data-tr="Kategori listeleme" data-en="Category listing">Kategori listeleme</li>
+                                <li data-tr="Veri temizleme" data-en="Data cleaning">Veri temizleme</li>
+                            </ul>
+                            <pre><code class="language-go">// Get unique values with specific filter
 filter := bson.D{{"title", "Back to the Future"}}
 results, err := collection.Distinct(context.TODO(), "year", filter)
 
-// Filtresiz benzersiz değerleri alma
+// Get unique values without filter
 results, err := collection.Distinct(context.TODO(), "department", nil)</code></pre>
+                        </div>
                     </div>
 
                     <div class="card">
                         <h3 data-tr="Find Options" data-en="Find Options">Find Options</h3>
-                        <pre><code class="language-go">// Sıralama
-opts := options.Find().SetSort(bson.D{{"enrollment", 1}})  // 1: artan, -1: azalan
+                        <div class="operator-details">
+                            <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                            <ul>
+                                <li data-tr="Gelişmiş sorgulama" data-en="Advanced querying">Gelişmiş sorgulama</li>
+                                <li data-tr="Sayfalama" data-en="Pagination">Sayfalama</li>
+                                <li data-tr="Alan seçimi" data-en="Field selection">Alan seçimi</li>
+                            </ul>
+                            <pre><code class="language-go">// Sorting
+opts := options.Find().SetSort(bson.D{{"enrollment", 1}})  // 1: ascending, -1: descending
 
-// Limit ve Skip
+// Limit and Skip 
 opts := options.Find().
-    SetLimit(2).                    // İlk 2 belge
-    SetSkip(1)                      // İlk belgeyi atla
+    SetLimit(2).                    // First 2 documents
+    SetSkip(1)                      // Skip first document
 
-// Projeksiyon (Hangi alanların döneceğini belirleme)
+// Projection (Determine which fields to return)
 opts := options.Find().SetProjection(bson.D{
-    {"course_id", 0},              // 0: hariç tut, 1: dahil et
+    {"course_id", 0},              // 0: exclude, 1: include
     {"enrollment", 0},
 })
 
-// Birleşik kullanım
+// Combined usage
 opts := options.Find().
     SetSort(bson.D{{"enrollment", 1}}).
     SetSkip(1).
     SetLimit(2).
     SetProjection(bson.D{{"title", 1}})</code></pre>
+                        </div>
                     </div>
 
                     <div class="card">
                         <h3 data-tr="Metin Arama Özellikleri" data-en="Text Search Features">Metin Arama Özellikleri</h3>
-                        <pre><code class="language-go">// Metin indeksi oluşturma
+                        <div class="operator-details">
+                            <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                            <ul>
+                                <li data-tr="Gelişmiş metin araması" data-en="Advanced text search">Gelişmiş metin araması</li>
+                                <li data-tr="Tam ifade araması" data-en="Exact phrase search">Tam ifade araması</li>
+                                <li data-tr="Metin skorlaması" data-en="Text scoring">Metin skorlaması</li>
+                            </ul>
+                            <pre><code class="language-go">// Create text index
 model := mongo.IndexModel{
     Keys: bson.D{{"description", "text"}},
 }
 name, err := collection.Indexes().CreateOne(context.TODO(), model)
 
-// Basit metin arama
+// Simple text search
 filter := bson.D{{"$text", bson.D{{"$search", "SERVES fish"}}}}
 
-// Tam ifade arama
+// Exact phrase search
 filter := bson.D{{"$text", bson.D{{"$search", "\"serves 2\""}}}}
 
-// Hariç tutma ile arama
+// Search with exclusion
 filter := bson.D{{"$text", bson.D{{"$search", "vegan -tofu"}}}}
 
-// Metin arama sonuçlarını sıralama ve puanlama
+// Sorting and scoring text search results 
 filter := bson.D{{"$text", bson.D{{"$search", "vegetarian"}}}}
 sort := bson.D{{"score", bson.D{{"$meta", "textScore"}}}}
 projection := bson.D{
@@ -415,37 +1355,54 @@ projection := bson.D{
     {"_id", 0},
 }
 opts := options.Find().SetSort(sort).SetProjection(projection)</code></pre>
+                        </div>
                     </div>
 
                     <div class="card">
                         <h3 data-tr="Dizi Güncelleme Detayları" data-en="Array Update Details">Dizi Güncelleme Detayları</h3>
-                        <pre><code class="language-go">// Belirli bir dizi öğesini güncelleme
+                        <div class="operator-details">
+                            <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                            <ul>
+                                <li data-tr="Belirli dizi öğelerini güncelleme" data-en="Updating specific array elements">Belirli dizi öğelerini güncelleme</li>
+                                <li data-tr="Dizi filtreleri ile güncelleme" data-en="Updating with array filters">Dizi filtreleri ile güncelleme</li>
+                                <li data-tr="Toplu dizi güncelleme" data-en="Bulk array update">Toplu dizi güncelleme</li>
+                            </ul>
+                            <pre><code class="language-go">// Update specific array element
 update := bson.D{{"$inc", bson.D{{"sizes.$", -2}}}}
 
-// Dizi filtreleri ile güncelleme
+// Update with array filters
 identifier := bson.D{{"hotOptions", bson.D{{"$gt", 100}}}}
 update := bson.D{{"$unset", bson.D{{"styles.$[hotOptions]", ""}}}}
 opts := options.Update().
     SetArrayFilters(options.ArrayFilters{Filters: identifier}).
     SetReturnDocument(options.After)
 
-// Tüm dizi öğelerini güncelleme
+// Update all array elements
 update := bson.D{{"$mul", bson.D{{"sizes.$[]", 29.57}}}}</code></pre>
+                        </div>
                     </div>
 
                     <div class="card">
                         <h3 data-tr="Koleksiyon Oluşturma ve İndeksleme" data-en="Collection Creation and Indexing">Koleksiyon Oluşturma ve İndeksleme</h3>
-                        <pre><code class="language-go">// Kümelenmiş indeks ile koleksiyon oluşturma
+                        <div class="operator-details">
+                            <p data-tr="Kullanım Senaryoları:" data-en="Usage Scenarios:">Kullanım Senaryoları:</p>
+                            <ul>
+                                <li data-tr="Kümelenmiş indeks oluşturma" data-en="Creating clustered index">Kümelenmiş indeks oluşturma</li>
+                                <li data-tr="Benzersiz indeks tanımlama" data-en="Defining unique index">Benzersiz indeks tanımlama</li>
+                                <li data-tr="Performans optimizasyonu" data-en="Performance optimization">Performans optimizasyonu</li>
+                            </ul>
+                            <pre><code class="language-go">// Creating a collection with a clustered index
 cio := bson.D{{"key", bson.D{{"_id", 1}}}, {"unique", true}}
 opts := options.CreateCollection().SetClusteredIndex(cio)
 db.CreateCollection(context.TODO(), "yeniKoleksiyon", opts)
 
-// Benzersiz indeks oluşturma
+// Creating a unique index
 indexModel := mongo.IndexModel{
     Keys:    bson.D{{"theaterId", -1}},
     Options: options.Index().SetUnique(true),
 }
 name, err := collection.Indexes().CreateOne(context.TODO(), indexModel)</code></pre>
+                        </div>
                     </div>
                 </section>
             </div>
