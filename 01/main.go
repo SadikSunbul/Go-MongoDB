@@ -49,6 +49,24 @@ type Movie struct {
 
 func moviesGet1(coll *mongo.Collection) {
 
+	/*
+		TODO : $lte sorguları
+
+		$eq  :Belirtilen değere eşit olan değerleri eşleştirir.
+		$gt  :Belirtilen değerden büyük olan değerlerle eşleşir.
+		$gte :Belirtilen değerden büyük veya ona eşit olan değerlerle eşleşir.
+		$in  :Bir dizide belirtilen değerlerden herhangi biriyle eşleşir.
+		$lt  :Matches values that are less than a specified value.
+		$lte :Belirtilen değerden küçük veya ona eşit olan değerlerle eşleşir.
+		$ne  :Belirtilen değere eşit olmayan tüm değerlerle eşleşir.
+		$nin :Bir dizide belirtilen değerlerden hiçbiriyle eşleşmez.
+
+		$$$ Example Usage
+
+		bson.D{{"year",bson.D{"$gte",2000}}} // burada year ı 200 den buyuk veya eşit olanları filtreler
+
+	*/
+
 	filter := bson.D{{"year", bson.D{{"$lte", 1999}}}, {"title", "Back to the Future"}}
 	cursor, err := coll.Find(context.TODO(), filter)
 
@@ -89,6 +107,7 @@ func moviesInsert(coll *mongo.Collection) {
 func moviesUpdate(coll *mongo.Collection) {
 
 	id, _ := primitive.ObjectIDFromHex("675d3a322979f406206c8341")
+
 	filter := bson.D{{"_id", id}}
 	update := bson.D{{"$set", bson.D{{"title", "DENEME"}, {"year", 9999}}}}
 
@@ -103,8 +122,8 @@ func moviesUpdate(coll *mongo.Collection) {
 }
 
 func moviesUpdateMany(coll *mongo.Collection) {
-	filter := bson.D{{"year", bson.D{{"$gte", 2000}}}}
-	update := bson.D{{"$set", bson.D{{"year", 2024}}}}
+	filter := bson.D{{"year", bson.D{{"$gte", 2000}}}} // TODO : $gte
+	update := bson.D{{"$set", bson.D{{"year", 2024}}}} //year alanını güncelle
 
 	result, err := coll.UpdateMany(context.TODO(), filter, update)
 	if err != nil {
@@ -238,9 +257,10 @@ func moviesdistinctTitles(coll *mongo.Collection) {
 
 	// Filtre: year alanında 2025 geçen belgeleri eşleştir
 	filter := bson.D{{"title", "Back to the Future"}}
-
 	// Distinct() ile "title" alanındaki benzersiz değerleri al
 	results, err := coll.Distinct(context.TODO(), "year", filter)
+	// Bu kod, MongoDB koleksiyonunda "title" değeri "Back to the Future" olan tüm belgeleri bulur
+	//Sonra bu belgelerin "year" alanlarındaki tekrar etmeyen farklı değerlerin listesini alır.
 	if err != nil {
 		fmt.Printf("Error while performing distinct operation: %v\n", err)
 		return
