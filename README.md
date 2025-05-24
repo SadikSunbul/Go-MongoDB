@@ -456,66 +456,164 @@ name, err := collection.Indexes().CreateOne(context.TODO(), indexModel)
 
 ## Agregasyon Pipeline Detayları
 
+MongoDB'de agregasyon pipeline'ı, belgeleri işlemek ve dönüştürmek için kullanılan güçlü bir araçtır. Pipeline, belgeleri bir dizi aşamadan geçirerek istenen sonuçları elde etmenizi sağlar.
+
+### Pipeline Operatörleri ve Açıklamaları:
+
+1. **$match**: Belgeleri filtrelemek için kullanılır. SQL'deki WHERE koşuluna benzer.
+   - Belirli kriterlere uyan belgeleri seçer
+   - Pipeline'ın başında kullanıldığında performansı artırır
+   - Birden fazla koşul birleştirilebilir
+
+2. **$unset**: Belirtilen alanları belgelerden kaldırır.
+   - Belge yapısını sadeleştirmek için kullanılır
+   - Birden fazla alan aynı anda kaldırılabilir
+   - İç içe alanlar da kaldırılabilir
+
+3. **$sort**: Belgeleri belirtilen alanlara göre sıralar.
+   - 1: Artan sıralama (A'dan Z'ye)
+   - -1: Azalan sıralama (Z'den A'ya)
+   - Birden fazla alana göre sıralama yapılabilir
+
+4. **$limit**: Dönen belge sayısını sınırlar.
+   - Performansı artırmak için kullanılır
+   - Genellikle $sort ile birlikte kullanılır
+   - Sayfalama için kullanılabilir
+
+5. **$group**: Belgeleri gruplar ve her grup için hesaplamalar yapar.
+   - _id: Gruplama yapılacak alan
+   - $sum: Toplam hesaplama
+   - $avg: Ortalama hesaplama
+   - $min: Minimum değer
+   - $max: Maximum değer
+   - $first: Gruptaki ilk değer
+   - $last: Gruptaki son değer
+   - $push: Değerleri dizi olarak toplar
+   - $addToSet: Tekrarsız değerleri dizi olarak toplar
+
+6. **$lookup**: Başka bir koleksiyonla birleştirme (join) yapar.
+   - from: Birleştirilecek koleksiyon
+   - localField: Mevcut koleksiyondaki alan
+   - foreignField: Birleştirilecek koleksiyondaki alan
+   - as: Sonuçların ekleneceği alan adı
+
+### Örnek Kullanımlar:
+
 ```go
 pipeline := mongo.Pipeline{
-    // Filtreleme
+    // 1. Filtreleme: Sadece "milk foam" içeren ürünleri seç
     {{"$match", bson.D{{"toppings", "milk foam"}}}},
     
-    // Alanları çıkarma
-    {{"$unset", bson.A{"_id", "category"}}},
+    // 2. Alanları çıkarma: _id ve category alanlarını kaldır
+    {{"$unset", bson.A{"_id", "category"}}}},
     
-    // Sıralama
+    // 3. Sıralama: Önce fiyata göre artan, sonra toppings'e göre artan sırala
     {{"$sort", bson.D{{"price", 1}, {"toppings", 1}}}},
     
-    // Limit
+    // 4. Limit: İlk 2 belgeyi al
     {{"$limit", 2}},
     
-    // Gruplama
+    // 5. Gruplama: Kategoriye göre grupla ve istatistikler hesapla
     {{"$group", bson.D{
         {"_id", "$category"},
-        {"total", bson.D{{"$sum", 1}}},
-        {"avgPrice", bson.D{{"$avg", "$price"}}},
+        {"total", bson.D{{"$sum", 1}}},           // Toplam belge sayısı
+        {"avgPrice", bson.D{{"$avg", "$price"}}}, // Ortalama fiyat
+        {"minPrice", bson.D{{"$min", "$price"}}}, // Minimum fiyat
+        {"maxPrice", bson.D{{"$max", "$price"}}}, // Maximum fiyat
+        {"firstProduct", bson.D{{"$first", "$name"}}}, // İlk ürün adı
+        {"allProducts", bson.D{{"$push", "$name"}}},   // Tüm ürün adları
+        {"uniqueToppings", bson.D{{"$addToSet", "$toppings"}}}, // Tekrarsız toppings
     }}},
     
-    // Lookup (Join)
+    // 6. Lookup: Kategoriler koleksiyonu ile birleştir
     {{"$lookup", bson.D{
-        {"from", "categories"},
-        {"localField", "categoryId"},
-        {"foreignField", "_id"},
-        {"as", "categoryInfo"},
+        {"from", "categories"},                    // Birleştirilecek koleksiyon
+        {"localField", "categoryId"},             // Mevcut koleksiyondaki alan
+        {"foreignField", "_id"},                  // Birleştirilecek koleksiyondaki alan
+        {"as", "categoryInfo"},                   // Sonuçların ekleneceği alan
+    }}},
+    
+    // 7. Projeksiyon: Sadece istenen alanları göster
+    {{"$project", bson.D{
+        {"_id", 0},                              // _id alanını gösterme
+        {"category", 1},                         // category alanını göster
+        {"total", 1},                           // total alanını göster
+        {"avgPrice", 1},                        // avgPrice alanını göster
+        {"categoryInfo.name", 1},               // categoryInfo içindeki name alanını göster
+    }}},
+    
+    // 8. Skip: İlk 5 sonucu atla (sayfalama için)
+    {{"$skip", 5}},
+    
+    // 9. Facet: Farklı hesaplamaları aynı anda yap
+    {{"$facet", bson.D{
+        {"priceStats", bson.A{
+            bson.D{{"$group", bson.D{
+                {"_id", nil},
+                {"avgPrice", bson.D{{"$avg", "$price"}}},
+                {"minPrice", bson.D{{"$min", "$price"}}},
+                {"maxPrice", bson.D{{"$max", "$price"}}},
+            }}},
+        }},
+        {"categoryStats", bson.A{
+            bson.D{{"$group", bson.D{
+                {"_id", "$category"},
+                {"count", bson.D{{"$sum", 1}}},
+            }}},
+        }},
     }}},
 }
-```
 
-## FindOneAnd... Metodları
-
-```go
-// FindOneAndDelete
-var result bson.M
-err = collection.FindOneAndDelete(
-    context.TODO(),
-    bson.D{{"name", "Ahmet"}},
-).Decode(&result)
-
-// FindOneAndUpdate
-update := bson.D{{"$set", bson.D{{"status", "updated"}}}}
-err = collection.FindOneAndUpdate(
-    context.TODO(),
-    bson.D{{"name", "Ahmet"}},
-    update,
-).Decode(&result)
-
-// FindOneAndReplace
-replacement := bson.D{
-    {"name", "Ahmet"},
-    {"age", 31},
-    {"email", "yeni@email.com"},
+// Pipeline'ı çalıştır
+cursor, err := collection.Aggregate(context.TODO(), pipeline)
+if err != nil {
+    log.Fatal(err)
 }
-err = collection.FindOneAndReplace(
-    context.TODO(),
-    bson.D{{"name", "Ahmet"}},
-    replacement,
-).Decode(&result)
+defer cursor.Close(context.TODO())
+
+// Sonuçları işle
+var results []bson.M
+if err = cursor.All(context.TODO(), &results); err != nil {
+    log.Fatal(err)
+}
+
+// Sonuçları yazdır
+for _, result := range results {
+    fmt.Printf("%+v\n", result)
+}
 ```
+
+### Diğer Önemli Pipeline Operatörleri:
+
+1. **$project**: Belge yapısını yeniden şekillendirir.
+   - Alanları yeniden adlandırma
+   - Yeni alanlar oluşturma
+   - Alanları kaldırma veya ekleme
+
+2. **$skip**: Belirtilen sayıda belgeyi atlar.
+   - Sayfalama için kullanılır
+   - $limit ile birlikte kullanılabilir
+
+3. **$facet**: Birden fazla agregasyon pipeline'ını paralel olarak çalıştırır.
+   - Farklı istatistikler hesaplamak için kullanılır
+   - Tek sorguda birden fazla sonuç döndürür
+
+4. **$addFields**: Yeni alanlar ekler veya mevcut alanları günceller.
+   - Hesaplanmış alanlar eklemek için kullanılır
+   - Mevcut alanları değiştirmek için kullanılır
+
+5. **$replaceRoot**: Belge yapısını değiştirir.
+   - İç içe belgeleri düzleştirmek için kullanılır
+   - Belge yapısını yeniden düzenlemek için kullanılır
+
+### Performans İpuçları:
+
+1. Pipeline'ın başında $match kullanın
+2. Gereksiz alanları $unset ile kaldırın
+3. İndeksleri doğru kullanın
+4. $limit ve $skip'i doğru sırada kullanın
+5. Büyük veri setlerinde $facet kullanırken dikkatli olun
+
+Bu detaylı açıklamalar ve örnekler, MongoDB agregasyon pipeline'ını daha etkili kullanmanıza yardımcı olacaktır. Her operatörün ne zaman ve nasıl kullanılacağını anlamak, karmaşık sorguları daha verimli bir şekilde yazmanızı sağlar.
 
 Bu rehber, Go ile MongoDB kullanımının tüm temel ve ileri düzey özelliklerini kapsamaktadır. Her operatör ve metod için detaylı açıklamalar ve örnekler eklenmiştir. Daha fazla bilgi için MongoDB resmi dokümantasyonunu inceleyebilirsiniz.
