@@ -84,14 +84,46 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Mobile menu toggle
+    // Mobil menü iyileştirmeleri
     const menuToggle = document.createElement('button');
     menuToggle.classList.add('menu-toggle');
     menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
     document.querySelector('.sidebar-header').appendChild(menuToggle);
 
+    const sidebar = document.querySelector('.sidebar');
+    const content = document.querySelector('.content');
+
     menuToggle.addEventListener('click', () => {
-        document.querySelector('.sidebar').classList.toggle('active');
+        sidebar.classList.toggle('active');
+        menuToggle.innerHTML = sidebar.classList.contains('active') 
+            ? '<i class="fas fa-times"></i>' 
+            : '<i class="fas fa-bars"></i>';
+    });
+
+    // Menü dışına tıklandığında menüyü kapat
+    document.addEventListener('click', (e) => {
+        if (!sidebar.contains(e.target) && !menuToggle.contains(e.target) && sidebar.classList.contains('active')) {
+            sidebar.classList.remove('active');
+            menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+        }
+    });
+
+    // Ekran boyutu değiştiğinde menüyü kontrol et
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && sidebar.classList.contains('active')) {
+            sidebar.classList.remove('active');
+            menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+        }
+    });
+
+    // Menü linklerine tıklandığında menüyü kapat
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+                menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
     });
 
     // Code block copy button

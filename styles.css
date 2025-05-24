@@ -201,7 +201,16 @@ pre code {
         display: block;
     }
 
+    .container {
+        margin-top: 60px;
+    }
+
     .sidebar {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        top: 40px;
+        z-index: 1000;
         transform: translateX(-100%);
         transition: transform 0.3s ease;
     }
@@ -213,6 +222,134 @@ pre code {
     .content {
         margin-left: 0;
         padding: 1rem;
+        width: 100%;
+    }
+
+    .content-wrapper {
+        padding: 0.5rem;
+    }
+
+    section {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    .card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    pre {
+        padding: 1rem;
+        font-size: 0.8rem;
+    }
+
+    .operator-details {
+        padding: 0.5rem;
+    }
+
+    .operator-details ul {
+        margin-left: 0.5rem;
+    }
+
+    .github-banner {
+        padding: 0.5rem;
+    }
+
+    .banner-content {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .language-selector {
+        margin-top: 0.5rem;
+    }
+}
+
+/* Tablet Uyumluluk */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    .content {
+        margin-left: 200px;
+    }
+
+    .content-wrapper {
+        max-width: 100%;
+    }
+}
+
+/* Küçük Mobil Cihazlar */
+@media (max-width: 480px) {
+    .container {
+        margin-top: 50px;
+    }
+
+    section {
+        padding: 0.75rem;
+    }
+
+    .card {
+        padding: 0.75rem;
+    }
+
+    pre {
+        padding: 0.75rem;
+        font-size: 0.75rem;
+    }
+
+    .operator-details {
+        padding: 0.25rem;
+    }
+
+    .github-banner {
+        padding: 0.25rem;
+    }
+}
+
+/* Yatay Mobil Görünüm */
+@media (max-height: 500px) and (orientation: landscape) {
+    .sidebar {
+        height: 100vh;
+        overflow-y: auto;
+    }
+
+    .content {
+        margin-top: 40px;
+    }
+}
+
+/* Dokunmatik Cihazlar için İyileştirmeler */
+@media (hover: none) {
+    .nav-links a:hover {
+        transform: none;
+    }
+
+    .card:hover {
+        transform: none;
+    }
+
+    .copy-button:hover {
+        background: var(--bg-secondary);
+        color: var(--text-secondary);
+    }
+}
+
+/* Yüksek Çözünürlüklü Ekranlar */
+@media (min-width: 1920px) {
+    .content-wrapper {
+        max-width: 1600px;
     }
 }
 
