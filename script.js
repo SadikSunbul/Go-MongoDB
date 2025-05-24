@@ -1,4 +1,53 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Dil değiştirme işlevselliği
+    const langButtons = document.querySelectorAll('.lang-btn');
+    let currentLang = 'en'; // Varsayılanı en yap
+
+    function changeLang(lang) {
+        currentLang = lang;
+        
+        // Aktif dil butonunu güncelle
+        langButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+
+        // Tüm çevrilebilir elementleri güncelle
+        document.querySelectorAll('[data-tr], [data-en]').forEach(element => {
+            const text = element.dataset[lang];
+            if (text) {
+                if (element.tagName === 'A') {
+                    const span = element.querySelector('span');
+                    if (span) {
+                        span.textContent = text;
+                    } else {
+                        element.textContent = text;
+                    }
+                } else if (element.tagName === 'SPAN') {
+                    element.textContent = text;
+                } else if (element.tagName === 'CODE') {
+                    element.textContent = text;
+                    // Prism.js'i yeniden vurgula
+                    Prism.highlightElement(element);
+                } else {
+                    element.textContent = text;
+                }
+            }
+        });
+
+        // HTML lang attribute'unu güncelle
+        document.documentElement.lang = lang;
+    }
+
+    // Dil butonlarına tıklama olayı ekle
+    langButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            changeLang(btn.dataset.lang);
+        });
+    });
+
+    // Sayfa yüklendiğinde EN dilini seçili yap
+    changeLang('en');
+
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {

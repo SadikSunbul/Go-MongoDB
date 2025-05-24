@@ -279,30 +279,99 @@ pre code {
 /* GitHub Banner */
 .github-banner {
     background-color: var(--bg-secondary);
-    padding: 0.75rem;
-    text-align: center;
-    border-bottom: 1px solid var(--border-color);
+    padding: 10px 0;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
+    border-bottom: 1px solid #333;
 }
 
-.github-banner a {
-    color: var(--text-primary);
+.banner-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.banner-title {
+    color: #00ED64;
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 600;
+    flex: 0 0 auto;
+    text-align: left;
+    letter-spacing: 0.5px;
+}
+
+.banner-center {
+    flex: 1;
+    text-align: center;
+}
+
+.banner-center a {
+    color: #fff;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 8px;
     font-size: 0.9rem;
-    transition: all 0.2s ease;
+    transition: color 0.3s ease;
 }
 
-.github-banner a:hover {
-    color: var(--accent-color);
+.banner-center a:hover {
+    color: #58a6ff;
 }
 
-.github-banner i {
-    font-size: 1.1rem;
+.language-selector {
+    display: flex;
+    gap: 8px;
+    margin-left: 20px;
+    justify-content: flex-end;
+    flex: 0 0 auto;
+}
+
+.lang-btn {
+    background: none;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.lang-btn:hover {
+    border-color: #00ED64;
+    color: #00ED64;
+}
+
+.lang-btn.active {
+    background: #00ED64;
+    border-color: #00ED64;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .banner-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .banner-title {
+        text-align: left;
+        margin-bottom: 4px;
+    }
+    .banner-center {
+        text-align: center;
+        margin-bottom: 4px;
+    }
+    .language-selector {
+        justify-content: flex-end;
+        margin-left: 0;
+    }
 } 
